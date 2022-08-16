@@ -1,0 +1,25 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/*.yaml
+build:
+  local: {}
+  platforms: ["linux/arm64"]
+  artifacts:
+    - image: chrisallmark/k3s-cluster-demo_client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        infer:
+          - "*.js"
+    - image: chrisallmark/k3s-cluster-demo_server
+      context: server
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        infer:
+          - "*.html"
+          - "*.js"
