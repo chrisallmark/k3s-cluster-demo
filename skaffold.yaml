@@ -5,17 +5,15 @@ deploy:
     manifests:
       - ./infra/*.yaml
 build:
-  local: {}
-  platforms: ["linux/arm64"]
   artifacts:
-    - image: chrisallmark/k3s-cluster-demo_client
+    - image: DOCKER_HUB_USERNAME/k3s-cluster-demo_client
       context: client
       docker:
         dockerfile: Dockerfile
       sync:
         infer:
           - "*.js"
-    - image: chrisallmark/k3s-cluster-demo_server
+    - image: DOCKER_HUB_USERNAME/k3s-cluster-demo_server
       context: server
       docker:
         dockerfile: Dockerfile
@@ -23,3 +21,7 @@ build:
         infer:
           - "*.html"
           - "*.js"
+  local:
+    push: true
+  tagPolicy:
+    sha256: {}
