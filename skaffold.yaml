@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta14
+kind: Config
+manifests:
+  rawYaml:
+    - ./infra/namespace.yaml
+    - ./infra/client.yaml
+    - ./infra/server.yaml
+    - ./infra/ingress-route.yaml
+deploy:
+  kubectl: {}
+build:
+  insecureRegistries:
+    - k3s:5000
+  artifacts:
+    - image: DOCKER_HUB_USERNAME/k3s-cluster-demo_client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+    - image: DOCKER_HUB_USERNAME/k3s-cluster-demo_server
+      context: server
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        infer:
+          - "*.js"
+  local:
+    push: true
+  tagPolicy:
+    sha256: {}

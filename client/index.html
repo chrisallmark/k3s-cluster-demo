@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>k3s Cluster Demo</title>
+  </head>
+  <body>
+    <p>__CLIENT_HOSTNAME__<br /><span id="server-hostname">...</span></p>
+    <script>
+      fetch("http://k3s/api")
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (data) {
+          document.getElementById("server-hostname").textContent =
+            data.hostname;
+        })
+        .catch(function () {
+          document.getElementById("server-hostname").textContent =
+            "Could not reach the server API.";
+        });
+    </script>
+  </body>
+</html>

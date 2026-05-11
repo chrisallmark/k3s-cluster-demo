@@ -1,0 +1,31 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingress-route
+  namespace: k3s-cluster-demo
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: (Host(`k3s`) && PathPrefix(`/api`))
+      kind: Rule
+      services:
+        - name: server
+          port: 1337
+      middlewares:
+        - name: api-stripprefix
+    - match: Host(`k3s`)
+      kind: Rule
+      services:
+        - name: client
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: api-stripprefix
+  namespace: k3s-cluster-demo
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
